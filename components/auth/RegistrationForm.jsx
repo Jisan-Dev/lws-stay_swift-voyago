@@ -1,6 +1,22 @@
+"use client";
+import { authClient } from "@/lib/auth-client";
+
 const RegistrationForm = () => {
+  async function handleSubmit(event) {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    const formData = {
+      name: data.get("fname") + " " + data.get("lname"),
+      email: data.get("email"),
+      password: data.get("password"),
+      callbackURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+    };
+    console.log("Form Data Submitted: ", formData);
+    const res = await authClient.signUp.email(formData);
+    console.log("Response: ", res);
+  }
   return (
-    <form className="login-form">
+    <form onSubmit={handleSubmit} className="login-form">
       <div>
         <label htmlFor="fname">First Name</label>
         <input type="text" name="fname" id="fname" />
