@@ -1,7 +1,10 @@
 "use client";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const RegistrationForm = () => {
+  const router = useRouter();
+
   async function handleSubmit(event) {
     event.preventDefault();
     const data = new FormData(event.target);
@@ -9,12 +12,19 @@ const RegistrationForm = () => {
       name: data.get("fname") + " " + data.get("lname"),
       email: data.get("email"),
       password: data.get("password"),
-      callbackURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+      // callbackURL: "/dashboard", // A URL to redirect to after the user verifies their email (optional)
     };
-    console.log("Form Data Submitted: ", formData);
-    const res = await authClient.signUp.email(formData);
+    const res = await authClient.signUp.email(formData, {
+      onSuccess: (ctx) => {
+        router.push("/");
+      },
+      onError: (err) => {
+        console.log("Error: ", err);
+      },
+    });
     console.log("Response: ", res);
   }
+
   return (
     <form onSubmit={handleSubmit} className="login-form">
       <div>
