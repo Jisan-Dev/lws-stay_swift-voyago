@@ -1,6 +1,12 @@
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import Link from "next/link";
+import Logout from "./auth/Logout";
 
-const Navbar = ({ isLandingPage = false, showSideMenu = true }) => {
+const Navbar = async ({ isLandingPage = false, showSideMenu = true }) => {
+  const session = await auth.api.getSession({ headers: await headers() });
+  console.log(session);
+
   return (
     <nav
       className={`w-full flex items-center justify-between py-4 ${isLandingPage ? "text-gray-100" : "text-gray-800"}`}
@@ -48,9 +54,17 @@ const Navbar = ({ isLandingPage = false, showSideMenu = true }) => {
             </li>
 
             <li>
-              <Link href="/login" className="login">
-                Login
-              </Link>
+              {session?.user ? (
+                <div>
+                  <span className="mx-1"> {session?.user?.name} </span>
+                  <span> | </span>
+                  <Logout />
+                </div>
+              ) : (
+                <Link href="/login" className="login">
+                  Login
+                </Link>
+              )}
             </li>
           </ul>
         )}
