@@ -1,18 +1,20 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
-  const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!process.env.NEXT_PUBLIC_BASE_URL) {
+      throw new Error("NEXT_PUBLIC_BASE_URL is not defined in environment variables");
+    }
+
     // Handle login logic here
     const data = new FormData(e.target);
     const formData = {
       email: data.get("email"),
       password: data.get("password"),
-      callbackURL: "http://localhost:3000", // it will redirect & also reload the page (optional, but reloading is good to fetch the session again after login is successful to avoid stale session or ensure session is properly set)
+      callbackURL: process.env.NEXT_PUBLIC_BASE_URL, // it will redirect & also reload the page (optional, but reloading is good to fetch the session again after login is successful to avoid stale session or ensure session is properly set)
     };
 
     const res = await authClient.signIn.email(formData, {

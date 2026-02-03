@@ -4,8 +4,7 @@ import Link from "next/link";
 import Logout from "./auth/Logout";
 
 const Navbar = async ({ isLandingPage = false, showSideMenu = true }) => {
-  const session = await auth.api.getSession({ headers: await headers() });
-  console.log(session);
+  const session = await auth.api.getSession({ headers: headers() });
 
   return (
     <nav

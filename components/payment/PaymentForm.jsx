@@ -1,3 +1,5 @@
+"use client";
+
 const PaymentForm = () => {
   return (
     <form className="my-8">

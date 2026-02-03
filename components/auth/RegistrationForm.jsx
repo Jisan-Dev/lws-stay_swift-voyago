@@ -16,7 +16,7 @@ const RegistrationForm = () => {
     };
     const res = await authClient.signUp.email(formData, {
       onSuccess: (ctx) => {
-        router.push("/");
+        router.replace("/");
       },
       onError: (err) => {
         console.log("Error: ", err);
