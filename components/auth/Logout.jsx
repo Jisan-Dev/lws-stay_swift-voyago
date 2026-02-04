@@ -11,7 +11,10 @@ export default function Logout() {
         await authClient.signOut({
           fetchOptions: {
             onSuccess: () => {
-              router.replace("/login");
+              router.refresh();
+              setTimeout(() => {
+                router.replace("/login");
+              }, 500);
             },
           },
         });

@@ -1,14 +1,11 @@
 import ProfileInfo from "@/components/user/ProfileInfo";
 import PastBooking from "@/components/user/booking/PastBooking";
 import UpcomingBooking from "@/components/user/booking/UpcomingBooking";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 
 const BookingsPage = async () => {
-  const { user } = await auth.api.getSession({ headers: headers() });
+  // const { user } = await auth.api.getSession({ headers: headers() });
 
-  if (!user) redirect("/login");
+  // if (!user) redirect("/login");
 
   return (
     <>
