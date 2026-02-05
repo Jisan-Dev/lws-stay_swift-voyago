@@ -12,6 +12,8 @@ export async function getAllHotels() {
   if (!session) throw new Error("Unauthorized");
   await connectToDatabase();
 
-  const hotels = await Hotels.find().lean();
+  const hotels = await Hotels.find()
+    .select(["thumbNailUrl", "name", "highRate", "lowRate", "city", "propertyCategory"])
+    .lean();
   return JSON.parse(JSON.stringify(hotels));
 }
