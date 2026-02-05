@@ -2,18 +2,38 @@
 
 import { auth } from "@/lib/auth";
 import { Hotels } from "@/lib/models/hotel";
+import { Ratings } from "@/lib/models/rating";
+import { Reviews } from "@/lib/models/review";
 import { connectToDatabase } from "@/lib/mongodb";
 import { headers } from "next/headers";
 
-export async function getAllHotels() {
-  // check session availability here to restrict access to this function
+const checkAuth = async () => {
   const session = await auth.api.getSession({ headers: headers() });
-
   if (!session) throw new Error("Unauthorized");
+};
+
+export async function getAllHotels() {
+  await checkAuth();
   await connectToDatabase();
 
   const hotels = await Hotels.find()
     .select(["thumbNailUrl", "name", "highRate", "lowRate", "city", "propertyCategory"])
     .lean();
   return JSON.parse(JSON.stringify(hotels));
+}
+
+export async function getRatings(id) {
+  await checkAuth();
+  await connectToDatabase();
+
+  const ratings = await Ratings.findById(id).lean();
+  return JSON.parse(JSON.stringify(ratings));
+}
+
+export async function getReviews(id) {
+  await checkAuth();
+  await connectToDatabase();
+
+  const reviews = await Reviews.findById(id).lean();
+  return JSON.parse(JSON.stringify(reviews));
 }
