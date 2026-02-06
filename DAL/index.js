@@ -1,5 +1,3 @@
-"use server";
-
 import { auth } from "@/lib/auth";
 import { Hotels } from "@/lib/models/hotel";
 import { Ratings } from "@/lib/models/rating";
@@ -20,6 +18,14 @@ export async function getAllHotels() {
     .select(["thumbNailUrl", "name", "highRate", "lowRate", "city", "propertyCategory"])
     .lean();
   return JSON.parse(JSON.stringify(hotels));
+}
+
+export async function getHotelById(id) {
+  await checkAuth();
+  await connectToDatabase();
+
+  const hotel = await Hotels.findById(id).lean();
+  return JSON.parse(JSON.stringify(hotel));
 }
 
 export async function getRatings(hotelId) {

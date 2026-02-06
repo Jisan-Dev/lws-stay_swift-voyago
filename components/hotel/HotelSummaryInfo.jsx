@@ -2,8 +2,8 @@ import { getRatings, getReviewsCount } from "@/DAL";
 import Link from "next/link";
 
 const HotelSummaryInfo = async ({ fromListPage, info }) => {
-  const totalReviews = await getReviewsCount(info._id);
-  const ratingsArr = await getRatings(info._id);
+  const totalReviews = await getReviewsCount(info?._id);
+  const ratingsArr = await getRatings(info?._id);
 
   let avgRating = 0;
 
@@ -29,7 +29,9 @@ const HotelSummaryInfo = async ({ fromListPage, info }) => {
   return (
     <>
       <div className={fromListPage ? "flex-1" : "flex-1 container"}>
-        <h2 className={fromListPage ? "font-bold text-lg" : "font-bold text-2xl"}>{info?.name}</h2>
+        <h2 className={fromListPage ? "font-bold text-lg" : "font-bold text-2xl text-primary"}>
+          {info?.name}
+        </h2>
         <p>📍 {info?.city}</p>
         <div className="flex gap-2 items-center my-4">
           <div className="bg-primary px-2 h-[35px] rounded-sm text-white grid place-items-center font-bold">
@@ -39,7 +41,7 @@ const HotelSummaryInfo = async ({ fromListPage, info }) => {
             <span className="font-semibold">{getRatingStatus(avgRating)}</span>
             <p>
               {totalReviews === 0 ? (
-                <Link href="#" className="underline">
+                <Link href="#" className="underline hover:text-primary transition-colors">
                   Be the first one to review
                 </Link>
               ) : (
@@ -63,9 +65,11 @@ const HotelSummaryInfo = async ({ fromListPage, info }) => {
         </h2>
         <p className=" text-right">Per Night for 1 Room</p>
         {fromListPage ? (
-          <button className="btn-primary ">Details</button>
+          <Link href={`/hotels/${info._id}`} className="btn-primary">
+            Details
+          </Link>
         ) : (
-          <button className="btn-primary ">Book</button>
+          <button className="btn-primary">Book</button>
         )}
       </div>
     </>
