@@ -22,18 +22,26 @@ export async function getAllHotels() {
   return JSON.parse(JSON.stringify(hotels));
 }
 
-export async function getRatings(id) {
+export async function getRatings(hotelId) {
   await checkAuth();
   await connectToDatabase();
 
-  const ratings = await Ratings.findById(id).lean();
+  const ratings = await Ratings.find({ hotelId }).lean();
   return JSON.parse(JSON.stringify(ratings));
 }
 
-export async function getReviews(id) {
+export async function getReviews(hotelId) {
   await checkAuth();
   await connectToDatabase();
 
-  const reviews = await Reviews.findById(id).lean();
+  const reviews = await Reviews.findById(hotelId).lean();
   return JSON.parse(JSON.stringify(reviews));
+}
+
+export async function getReviewsCount(hotelId) {
+  await checkAuth();
+  await connectToDatabase();
+
+  const reviewsCount = await Reviews.countDocuments({ hotelId });
+  return reviewsCount;
 }
