@@ -1,7 +1,7 @@
 import { getRatings, getReviewsCount } from "@/DAL";
 import Link from "next/link";
 
-const HotelSummaryInfo = async ({ fromListPage, info }) => {
+const HotelSummaryInfo = async ({ fromListPage, info, checkin, checkout }) => {
   const totalReviews = await getReviewsCount(info?._id);
   const ratingsArr = await getRatings(info?._id);
 
@@ -68,7 +68,10 @@ const HotelSummaryInfo = async ({ fromListPage, info }) => {
         </h2>
         <p className=" text-right">Per Night for 1 Room</p>
         {fromListPage ? (
-          <Link href={`/hotels/${info._id}`} className="btn-primary">
+          <Link
+            href={`/hotels/${info._id}?checkin=${checkin}&checkout=${checkout}`}
+            className="btn-primary"
+          >
             Details
           </Link>
         ) : (

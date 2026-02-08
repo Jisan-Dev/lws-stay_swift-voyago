@@ -65,11 +65,19 @@ async function findBookings(hotelId, checkin, checkout) {
   return found;
 }
 
-export async function getHotelById(id) {
+export async function getHotelById(id, checkin, checkout) {
   await checkAuth();
   await connectToDatabase();
 
   const hotel = await Hotels.findById(id).lean();
+  if (checkin && checkout) {
+    const foundBookings = await findBookings(id, checkin, checkout);
+    if (foundBookings) {
+      hotel["isBooked"] = true;
+    } else {
+      hotel["isBooked"] = false;
+    }
+  }
   return JSON.parse(JSON.stringify(hotel));
 }
 
