@@ -64,7 +64,8 @@ const Search = ({ fromList, destination, checkin, checkout }) => {
                 onChange={handleInputs}
               >
                 <option value=""> Select a destination </option>
-                <option value="Bali">Bali</option>
+                <option value="Puglia">Puglia</option>
+                <option value="Frejus">Frejus</option>
                 <option value="Cox">Cox&#39;s Bazar</option>
                 <option value="Sylhet">Sylhet</option>
                 <option value="Saint Martin">Saint Martin</option>
