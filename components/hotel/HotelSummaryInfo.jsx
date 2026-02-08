@@ -52,10 +52,13 @@ const HotelSummaryInfo = async ({ fromListPage, info }) => {
             </p>
           </div>
         </div>
-        <div>
+        <div className="flex gap-2 items-center">
           <span className="bg-yellow-300 p-1 rounded-md text-sm">
             {info?.propertyCategory} Star Property
           </span>
+          {info?.isBooked && (
+            <span className="bg-red-300 text-red-950 p-1 px-2 rounded-md text-xs">BOOKED!</span>
+          )}
         </div>
       </div>
 

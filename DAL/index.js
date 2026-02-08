@@ -17,7 +17,7 @@ export async function getAllHotels(destination, checkin, checkout) {
   await checkAuth();
   await connectToDatabase();
 
-  console.log("destination", destination, checkin, checkout);
+  console.log(checkin, checkout);
 
   let query = {};
   const regex = new RegExp(destination, "i");
@@ -32,12 +32,12 @@ export async function getAllHotels(destination, checkin, checkout) {
   const hotels = await Hotels.find(query)
     .select(["thumbNailUrl", "name", "highRate", "lowRate", "city", "propertyCategory"])
     .lean();
-  console.log(hotels);
+
   let allHotels = hotels;
 
   if (checkin && checkout) {
     allHotels = await Promise.all(
-      hotels.map(async (hotel) => {
+      allHotels.map(async (hotel) => {
         const foundBookings = await findBookings(hotel._id, checkin, checkout);
         if (foundBookings) {
           hotel["isBooked"] = true;
@@ -54,13 +54,14 @@ export async function getAllHotels(destination, checkin, checkout) {
 
 async function findBookings(hotelId, checkin, checkout) {
   const bookings = await Bookings.find({ hotelId }).lean();
-  console.log("bookings:", bookings);
+
   const found = bookings.find((booking) => {
     return (
-      isDateInBetween(booking.checkin, checkin, checkout) ||
-      isDateInBetween(booking.checkout, checkin, checkout)
+      isDateInBetween(checkin, booking.checkin, booking.checkout) ||
+      isDateInBetween(checkout, booking.checkin, booking.checkout)
     );
   });
+  console.log("found", found);
   return found;
 }
 
