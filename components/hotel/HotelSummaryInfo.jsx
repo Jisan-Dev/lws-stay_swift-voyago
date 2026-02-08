@@ -75,7 +75,9 @@ const HotelSummaryInfo = async ({ fromListPage, info, checkin, checkout }) => {
             Details
           </Link>
         ) : (
-          <button className="btn-primary">Book</button>
+          <button disabled={info?.isBooked} className="btn-primary">
+            Book
+          </button>
         )}
       </div>
     </>

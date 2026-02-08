@@ -36,7 +36,7 @@
   }
 
   .btn-primary {
-    @apply bg-primary px-8 py-2 rounded-md block text-white font-bold shadow-lg hover:shadow-primary/50 active:scale-95 transition-all;
+    @apply bg-primary px-8 py-2 rounded-md block text-white font-bold shadow-lg hover:shadow-primary/50 active:scale-95 transition-all disabled:cursor-not-allowed disabled:bg-gray-400 disabled:text-gray-700 disabled:shadow-none;
   }
 
   #searchParams {
