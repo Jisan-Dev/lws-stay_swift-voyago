@@ -66,10 +66,14 @@ const Search = ({ fromList, destination, checkin, checkout }) => {
                 <option value=""> Select a destination </option>
                 <option value="Puglia">Puglia</option>
                 <option value="Frejus">Frejus</option>
-                <option value="Cox">Cox&#39;s Bazar</option>
-                <option value="Sylhet">Sylhet</option>
-                <option value="Saint Martin">Saint Martin</option>
-                <option value="Bali">Bali</option>
+                <option value="Kerkira">Kerkira</option>
+                <option value="Karlovasi">Karlovasi</option>
+                <option value="Saint-Denis">Saint-Denis</option>
+                <option value="Cergy">Cergy</option>
+                <option value="Paris">Paris</option>
+                <option value="Le Pré-Saint-Gervais">Le Pré-Saint-Gervais</option>
+                <option value="Calvi">Calvi</option>
+                <option value="Catania">Catania</option>
               </select>
             </h4>
           </div>
