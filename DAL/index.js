@@ -8,7 +8,7 @@ import { connectToDatabase } from "@/lib/mongodb";
 import { isDateInBetween } from "@/utils";
 import { headers } from "next/headers";
 
-const checkAuth = async () => {
+export const checkAuth = async () => {
   const session = await auth.api.getSession({ headers: headers() });
   if (!session) throw new Error("Unauthorized");
 };
@@ -52,7 +52,7 @@ export async function getAllHotels(destination, checkin, checkout) {
   return JSON.parse(JSON.stringify(allHotels));
 }
 
-async function findBookings(hotelId, checkin, checkout) {
+export async function findBookings(hotelId, checkin, checkout) {
   const bookings = await Bookings.find({ hotelId }).lean();
 
   const found = bookings.find((booking) => {

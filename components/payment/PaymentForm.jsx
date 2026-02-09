@@ -1,16 +1,62 @@
 "use client";
 
-const PaymentForm = ({ checkin, checkout, userName, email, hotelInfo, totalCost }) => {
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+const PaymentForm = ({ checkin, checkout, hotelInfo, totalCost }) => {
+  const [error, setError] = useState("");
+  const { data: session, isPending } = authClient.useSession();
+  console.log("session", session);
+  const router = useRouter();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Handle form submission logic here
+    try {
+      const formData = new FormData(e.target);
+      const hotelId = hotelInfo?._id;
+      const userId = session?.user?.id;
+      const checkin = formData.get("checkin");
+      const checkout = formData.get("checkout");
+
+      console.log(checkin, checkout);
+
+      const res = await fetch("/api/payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ hotelId, userId, checkin, checkout }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Failed to create booking");
+      }
+
+      const data = await res.json();
+      console.log("Payment response", data);
+      alert("Payment successful! Your booking has been created.");
+      router.replace("/bookings");
+    } catch (error) {
+      console.error("Something went wrong with creating payment:", error);
+      setError(error.message);
+      alert("Something went wrong with creating payment: " + error.message);
+    }
+  };
+
   return (
-    <form className="my-8">
+    <form onSubmit={handleSubmit} className="my-8">
       <div className="my-4 space-y-2">
+        {error && <p className="text-red-500 text-sm">{error}</p>}
         <label htmlFor="name" className="block">
           Name
         </label>
         <input
           type="text"
           id="name"
-          value={userName}
+          value={isPending ? "Loading..." : session?.user?.name || ""}
           disabled
           className="w-full border border-[#CCCCCC]/60 py-1 px-2 rounded-md"
         />
@@ -23,7 +69,7 @@ const PaymentForm = ({ checkin, checkout, userName, email, hotelInfo, totalCost 
         <input
           type="email"
           id="email"
-          value={email}
+          value={isPending ? "Loading..." : session?.user?.email || ""}
           disabled
           className="w-full border border-[#CCCCCC]/60 py-1 px-2 rounded-md"
         />
@@ -32,14 +78,14 @@ const PaymentForm = ({ checkin, checkout, userName, email, hotelInfo, totalCost 
       <div className="my-4 space-y-2">
         <span>Check in</span>
         <h4 className="mt-2">
-          <input type="date" name="checkin" id="checkin" value={checkin} disabled />
+          <input type="date" name="checkin" id="checkin" value={checkin} />
         </h4>
       </div>
 
       <div className="my-4 space-y-2">
         <span>Checkout</span>
         <h4 className="mt-2">
-          <input type="date" name="checkout" id="checkout" value={checkout} disabled />
+          <input type="date" name="checkout" id="checkout" value={checkout} />
         </h4>
       </div>
 
