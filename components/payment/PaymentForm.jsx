@@ -1,6 +1,6 @@
 "use client";
 
-const PaymentForm = () => {
+const PaymentForm = ({ checkin, checkout, userName, email, hotelInfo, totalCost }) => {
   return (
     <form className="my-8">
       <div className="my-4 space-y-2">
@@ -10,6 +10,8 @@ const PaymentForm = () => {
         <input
           type="text"
           id="name"
+          value={userName}
+          disabled
           className="w-full border border-[#CCCCCC]/60 py-1 px-2 rounded-md"
         />
       </div>
@@ -21,6 +23,8 @@ const PaymentForm = () => {
         <input
           type="email"
           id="email"
+          value={email}
+          disabled
           className="w-full border border-[#CCCCCC]/60 py-1 px-2 rounded-md"
         />
       </div>
@@ -28,14 +32,14 @@ const PaymentForm = () => {
       <div className="my-4 space-y-2">
         <span>Check in</span>
         <h4 className="mt-2">
-          <input type="date" name="checkin" id="checkin" />
+          <input type="date" name="checkin" id="checkin" value={checkin} disabled />
         </h4>
       </div>
 
       <div className="my-4 space-y-2">
         <span>Checkout</span>
         <h4 className="mt-2">
-          <input type="date" name="checkout" id="checkout" />
+          <input type="date" name="checkout" id="checkout" value={checkout} disabled />
         </h4>
       </div>
 
@@ -73,7 +77,7 @@ const PaymentForm = () => {
       </div>
 
       <button type="submit" className="btn-primary w-full">
-        Pay Now ($10)
+        Pay Now (${totalCost.toFixed(2)})
       </button>
     </form>
   );

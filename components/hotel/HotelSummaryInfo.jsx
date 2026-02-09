@@ -75,9 +75,17 @@ const HotelSummaryInfo = async ({ fromListPage, info, checkin, checkout }) => {
             Details
           </Link>
         ) : (
-          <button disabled={info?.isBooked} className="btn-primary">
-            Book
-          </button>
+          <Link
+            href={
+              info?.isBooked
+                ? "#"
+                : `/hotels/${info._id}/payment?checkin=${checkin}&checkout=${checkout}`
+            }
+          >
+            <button disabled={info?.isBooked} className="btn-primary">
+              Book
+            </button>
+          </Link>
         )}
       </div>
     </>
