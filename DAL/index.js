@@ -103,3 +103,11 @@ export async function getReviewsCount(hotelId) {
   const reviewsCount = await Reviews.countDocuments({ hotelId });
   return reviewsCount;
 }
+
+export async function getBookingsByUser(userId) {
+  await checkAuth();
+  await connectToDatabase();
+
+  const bookings = await Bookings.find({ userId }).lean();
+  return JSON.parse(JSON.stringify(bookings));
+}
