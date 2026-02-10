@@ -21,17 +21,15 @@ const Search = ({ fromList, destination, checkin, checkout }) => {
 
     const state = { ...searchTerm, [name]: value };
 
-    if (
-      new Date(state.checkin).getTime() > new Date(state.checkout).getTime() ||
-      (!state.checkin && state.checkout) ||
-      (!state.checkout && state.checkin)
-    ) {
-      setAllowSearch(false);
-    } else {
-      setAllowSearch(true);
-    }
+    setAllowSearch(isValidSearch(state));
 
     setSearchTerm(state);
+  };
+
+  const isValidSearch = (searchState) => {
+    if (!searchState.destination) return false;
+    if (!searchState.checkin || !searchState.checkout) return false;
+    return new Date(searchState.checkin).getTime() <= new Date(searchState.checkout).getTime();
   };
 
   const handleSearch = () => {
