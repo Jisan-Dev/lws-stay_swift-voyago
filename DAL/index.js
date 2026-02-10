@@ -13,7 +13,7 @@ export const checkAuth = async () => {
   if (!session) throw new Error("Unauthorized");
 };
 
-export async function getAllHotels(destination, checkin, checkout) {
+export async function getAllHotels(destination, checkin, checkout, category) {
   await checkAuth();
   await connectToDatabase();
 
@@ -28,6 +28,11 @@ export async function getAllHotels(destination, checkin, checkout) {
   //   query.checkin = { $lte: new Date(checkin) };
   //   query.checkout = { $gte: new Date(checkout) };
   // }
+
+  if (category) {
+    const categoriesToMatch = category.split("|");
+    query.propertyCategory = { $in: categoriesToMatch };
+  }
 
   const hotels = await Hotels.find(query)
     .select(["thumbNailUrl", "name", "highRate", "lowRate", "city", "propertyCategory"])
