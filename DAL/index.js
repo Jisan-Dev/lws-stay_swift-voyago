@@ -13,27 +13,46 @@ export const checkAuth = async () => {
   if (!session) throw new Error("Unauthorized");
 };
 
-export async function getAllHotels(destination, checkin, checkout, category) {
+export async function getAllHotels(destination, checkin, checkout, category, price) {
   await checkAuth();
   await connectToDatabase();
 
-  console.log(checkin, checkout);
+  console.log(checkin, checkout, "pp", price);
 
   let query = {};
   const regex = new RegExp(destination, "i");
   if (destination) {
     query.city = { $regex: regex };
   }
-  // if (checkin && checkout) {
-  //   query.checkin = { $lte: new Date(checkin) };
-  //   query.checkout = { $gte: new Date(checkout) };
-  // }
 
   if (category) {
     const categoriesToMatch = category.split("|");
     query.propertyCategory = { $in: categoriesToMatch };
   }
 
+  if (price) {
+    const priceRanges = price.split("|");
+    const minMaxConditions = [];
+
+    for (const range of priceRanges) {
+      if (range.includes("+")) {
+        const min = parseFloat(range.replace("+", ""));
+        minMaxConditions.push({ lowRate: { $gte: min } });
+      } else if (range.includes("-")) {
+        const [min, max] = range.split("-");
+        minMaxConditions.push({
+          lowRate: {
+            $gte: parseFloat(min),
+            $lte: parseFloat(max),
+          },
+        });
+      }
+    }
+
+    if (minMaxConditions.length > 0) {
+      query.$or = minMaxConditions;
+    }
+  }
   const hotels = await Hotels.find(query)
     .select(["thumbNailUrl", "name", "highRate", "lowRate", "city", "propertyCategory"])
     .lean();

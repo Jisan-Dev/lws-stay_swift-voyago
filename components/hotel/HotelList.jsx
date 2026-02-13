@@ -2,8 +2,8 @@ import { getAllHotels } from "@/DAL";
 import HotelCard from "./HotelCard";
 import NoHotels from "./NoHotel";
 
-const HotelList = async ({ destination, checkin, checkout, category }) => {
-  const hotels = await getAllHotels(destination, checkin, checkout, category);
+const HotelList = async ({ destination, checkin, checkout, category, price }) => {
+  const hotels = await getAllHotels(destination, checkin, checkout, category, price);
 
   return (
     <div className="col-span-9">
