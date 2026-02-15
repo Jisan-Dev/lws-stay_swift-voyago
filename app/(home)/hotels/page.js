@@ -8,7 +8,9 @@ const refinedCategory = (category) => {
   return decodedCategory;
 };
 
-const HotelListPage = ({ searchParams: { destination, checkin, checkout, category, price } }) => {
+const HotelListPage = ({
+  searchParams: { destination, checkin, checkout, category, price, sort },
+}) => {
   return (
     <>
       <section className="bg-[url('/hero-bg.jpg')] bg-cover bg-no-repeat bg-center pt-[100px] pb-[60px]">
@@ -25,6 +27,7 @@ const HotelListPage = ({ searchParams: { destination, checkin, checkout, categor
             checkout={checkout}
             category={refinedCategory(category)}
             price={decodeURI(price)}
+            sort={sort}
           />
         </div>
       </section>

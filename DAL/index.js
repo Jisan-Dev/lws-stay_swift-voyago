@@ -13,7 +13,7 @@ export const checkAuth = async () => {
   if (!session) throw new Error("Unauthorized");
 };
 
-export async function getAllHotels(destination, checkin, checkout, category, price) {
+export async function getAllHotels(destination, checkin, checkout, category, price, sort) {
   await checkAuth();
   await connectToDatabase();
 
@@ -40,12 +40,20 @@ export async function getAllHotels(destination, checkin, checkout, category, pri
         minMaxConditions.push({ lowRate: { $gte: min } });
       } else if (range.includes("-")) {
         const [min, max] = range.split("-");
-        minMaxConditions.push({
-          lowRate: {
-            $gte: parseFloat(min),
-            $lte: parseFloat(max),
+        minMaxConditions.push(
+          {
+            lowRate: {
+              $gte: parseFloat(min),
+              $lte: parseFloat(max),
+            },
           },
-        });
+          {
+            highRate: {
+              $gte: parseFloat(min),
+              $lte: parseFloat(max),
+            },
+          },
+        );
       }
     }
 
@@ -55,6 +63,7 @@ export async function getAllHotels(destination, checkin, checkout, category, pri
   }
   const hotels = await Hotels.find(query)
     .select(["thumbNailUrl", "name", "highRate", "lowRate", "city", "propertyCategory"])
+    .sort(sort === "desc" ? { lowRate: -1 } : { lowRate: 1 })
     .lean();
 
   let allHotels = hotels;
